@@ -102,7 +102,7 @@
                 },
                 "data": {
                     "name": "Zusätzliche Daten",
-                    "description": "Alle zusätzlichen Daten, die an den Serviceaufruf übergeben werden sollen"
+                    "description": "Alle zusätzlichen Daten, die an den Serviceaufruf übergeben werden sollen. Hinweis: UI-konfigurierbare Parameter oben überschreiben übereinstimmende Schlüssel in diesem Feld."
                 }
             }
         },

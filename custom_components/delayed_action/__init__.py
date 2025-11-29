@@ -98,6 +98,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         # Merge UI-configurable parameters into additional_data
         for param in UI_ACTION_PARAMS:
             if param in call.data:
+                if param in additional_data:
+                    _LOGGER.debug(f"UI parameter '{param}' overrides existing value in additional_data")
                 additional_data[param] = call.data[param]
 
         task_id = str(uuid.uuid4())

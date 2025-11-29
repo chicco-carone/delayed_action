@@ -168,7 +168,7 @@ execute:
           mode: slider
     data:
       name: "Additional Data"
-      description: "Any additional data to be passed to the service call as a dictionary (optional, for advanced use)"
+      description: "Any additional data to be passed to the service call as a dictionary (optional, for advanced use). Note: UI-configurable parameters above will override matching keys in this field."
       example: '{"attribute": "value"}'
       selector:
         object:
