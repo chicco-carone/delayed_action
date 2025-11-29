@@ -1,18 +1,204 @@
 execute:
+  name: "Execute Delayed Action"
   description: "Schedule an action with a delay or at a specific time"
   fields:
     entity_id:
+      name: "Entity"
       description: "The entity ID of the device to control"
+      required: true
       example: "switch.any_switch"
+      selector:
+        entity:
     action:
+      name: "Action"
       description: "The action to perform (e.g., turn_on, turn_off, set_brightness, set_temperature)"
+      required: true
       example: "turn_on"
+      selector:
+        text:
     delay:
+      name: "Delay (seconds)"
       description: "The delay in seconds before performing the action"
       example: 10
+      selector:
+        number:
+          min: 0
+          max: 86400
+          unit_of_measurement: "seconds"
+          mode: box
     datetime:
-      description: "The specific date and time to perform the action (ISO 8601 format)"
+      name: "Date and Time"
+      description: "The specific date and time to perform the action"
       example: "2024-06-23T18:00:00"
-    additional_data:
-      description: "Any additional data to be passed to the service call (optional)"
-      example: {"attribute": "value"}
+      selector:
+        datetime:
+    brightness:
+      name: "Brightness"
+      description: "Brightness level for light entities (0-255)"
+      example: 128
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: slider
+    brightness_pct:
+      name: "Brightness Percentage"
+      description: "Brightness percentage for light entities (0-100)"
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    color_temp:
+      name: "Color Temperature"
+      description: "Color temperature in mireds for light entities"
+      example: 300
+      selector:
+        number:
+          min: 153
+          max: 500
+          mode: slider
+    rgb_color:
+      name: "RGB Color"
+      description: "RGB color for light entities"
+      example: "[255, 100, 100]"
+      selector:
+        color_rgb:
+    temperature:
+      name: "Temperature"
+      description: "Target temperature for climate entities"
+      example: 21
+      selector:
+        number:
+          min: 5
+          max: 35
+          step: 0.5
+          unit_of_measurement: "°C"
+          mode: slider
+    hvac_mode:
+      name: "HVAC Mode"
+      description: "HVAC mode for climate entities"
+      example: "heat"
+      selector:
+        select:
+          options:
+            - "off"
+            - "heat"
+            - "cool"
+            - "heat_cool"
+            - "auto"
+            - "dry"
+            - "fan_only"
+    position:
+      name: "Position"
+      description: "Position for cover entities (0-100)"
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    tilt_position:
+      name: "Tilt Position"
+      description: "Tilt position for cover entities (0-100)"
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    volume_level:
+      name: "Volume Level"
+      description: "Volume level for media player entities (0.0-1.0)"
+      example: 0.5
+      selector:
+        number:
+          min: 0
+          max: 1
+          step: 0.01
+          mode: slider
+    media_content_id:
+      name: "Media Content ID"
+      description: "Media content ID for media player entities"
+      example: "spotify:playlist:123"
+      selector:
+        text:
+    media_content_type:
+      name: "Media Content Type"
+      description: "Media content type for media player entities"
+      example: "music"
+      selector:
+        select:
+          options:
+            - "music"
+            - "tvshow"
+            - "video"
+            - "episode"
+            - "channel"
+            - "playlist"
+    option:
+      name: "Option"
+      description: "Option to select for input_select or select entities"
+      example: "Option 1"
+      selector:
+        text:
+    percentage:
+      name: "Fan Speed Percentage"
+      description: "Speed percentage for fan entities (0-100)"
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    humidity:
+      name: "Target Humidity"
+      description: "Target humidity for humidifier entities (0-100)"
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+          mode: slider
+    data:
+      name: "Additional Data"
+      description: "Any additional data to be passed to the service call as a dictionary (optional, for advanced use)"
+      example: '{"attribute": "value"}'
+      selector:
+        object:
+cancel:
+  name: "Cancel Delayed Action"
+  description: "Cancel a scheduled delayed action"
+  fields:
+    entity_id:
+      name: "Entity"
+      description: "The entity ID of the device to cancel actions for"
+      required: true
+      example: "switch.any_switch"
+      selector:
+        entity:
+    task_id:
+      name: "Task ID"
+      description: "The specific task ID to cancel (optional, cancels all tasks for entity if not provided)"
+      example: "abc123"
+      selector:
+        text:
+list:
+  name: "List Delayed Actions"
+  description: "List all scheduled delayed actions"
+  fields:
+    entity_id:
+      name: "Entity"
+      description: "Filter by entity ID (optional, lists all if not provided)"
+      example: "switch.any_switch"
+      selector:
+        entity:
+get_config:
+  name: "Get Configuration"
+  description: "Get the current delayed action configuration"

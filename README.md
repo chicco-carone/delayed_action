@@ -58,11 +58,37 @@ You can use the `delayed_action.execute` service to schedule actions with a dela
 
 ### Service Data Attributes
 
-- `entity_id` (required): The entity ID of the device to control.
-- `action` (required): The action to perform (e.g., `turn_on`, `turn_off`, `set_brightness`, `set_temperature`).
-- `delay` (optional): The delay in seconds before performing the action.
-- `datetime` (optional): The specific date and time to perform the action (ISO 8601 format).
-- `additional_data` (optional): Any additional data to be passed to the service call.
+**Required:**
+- `entity_id`: The entity ID of the device to control.
+- `action`: The action to perform (e.g., `turn_on`, `turn_off`, `set_brightness`, `set_temperature`).
+
+**Timing (one required):**
+- `delay`: The delay in seconds before performing the action.
+- `datetime`: The specific date and time to perform the action (ISO 8601 format).
+
+**UI-Configurable Action Parameters:**
+
+These parameters can be configured directly in the Home Assistant UI when calling the service:
+
+| Parameter | Description | Applicable Entities |
+|-----------|-------------|---------------------|
+| `brightness` | Brightness level (0-255) | Lights |
+| `brightness_pct` | Brightness percentage (0-100%) | Lights |
+| `color_temp` | Color temperature in mireds | Lights |
+| `rgb_color` | RGB color [R, G, B] | Lights |
+| `temperature` | Target temperature | Climate |
+| `hvac_mode` | HVAC mode (heat, cool, auto, etc.) | Climate |
+| `position` | Cover position (0-100%) | Covers |
+| `tilt_position` | Tilt position (0-100%) | Covers |
+| `volume_level` | Volume level (0.0-1.0) | Media Players |
+| `media_content_id` | Media content ID | Media Players |
+| `media_content_type` | Media content type | Media Players |
+| `option` | Option to select | Input Select, Select |
+| `percentage` | Fan speed percentage (0-100%) | Fans |
+| `humidity` | Target humidity (0-100%) | Humidifiers |
+
+**Advanced:**
+- `data`: Any additional data to be passed to the service call as a dictionary (for advanced use cases).
 
 ### Examples
 
@@ -91,6 +117,35 @@ script:
           delay: 15  # Delay in seconds
           action: turn_on
           brightness: 128
+```
+
+#### Script: Set Climate Temperature with Delay
+
+```yaml
+script:
+  set_temperature_with_delay:
+    sequence:
+      - service: delayed_action.execute
+        data:
+          entity_id: climate.living_room
+          delay: 60  # Delay in seconds
+          action: set_temperature
+          temperature: 22
+          hvac_mode: heat
+```
+
+#### Script: Set Cover Position at Specific Time
+
+```yaml
+script:
+  close_blinds_at_sunset:
+    sequence:
+      - service: delayed_action.execute
+        data:
+          entity_id: cover.living_room_blinds
+          datetime: "2024-06-23T20:00:00"
+          action: set_cover_position
+          position: 0
 ```
 
 ## Development

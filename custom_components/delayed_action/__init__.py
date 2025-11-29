@@ -9,7 +9,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.event import async_call_later, async_track_point_in_time
 from homeassistant.helpers.entity_registry import async_get as async_get_entity_registry
 from homeassistant.helpers.service import async_register_admin_service
-from .const import DOMAIN, ATTR_ENTITY_ID, ATTR_DELAY, ATTR_ACTION, ATTR_DATETIME, ATTR_ADDITIONAL_DATA, ATTR_TASK_ID, CONF_DOMAINS, ATTR_DOMAINS
+from .const import (
+    DOMAIN, ATTR_ENTITY_ID, ATTR_DELAY, ATTR_ACTION, ATTR_DATETIME,
+    ATTR_ADDITIONAL_DATA, ATTR_TASK_ID, CONF_DOMAINS, ATTR_DOMAINS,
+    UI_ACTION_PARAMS
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,6 +29,21 @@ SERVICE_DELAY_SCHEMA = vol.Schema(
         vol.Optional(ATTR_DELAY): vol.All(vol.Coerce(int), vol.Range(min=0)),
         vol.Optional(ATTR_DATETIME): cv.datetime,
         vol.Optional(ATTR_ADDITIONAL_DATA): dict,
+        # UI-configurable action parameters
+        vol.Optional("brightness"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+        vol.Optional("brightness_pct"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional("color_temp"): vol.All(vol.Coerce(int), vol.Range(min=153, max=500)),
+        vol.Optional("rgb_color"): vol.All(list, vol.Length(min=3, max=3)),
+        vol.Optional("temperature"): vol.Coerce(float),
+        vol.Optional("hvac_mode"): cv.string,
+        vol.Optional("position"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional("tilt_position"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional("volume_level"): vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
+        vol.Optional("media_content_id"): cv.string,
+        vol.Optional("media_content_type"): cv.string,
+        vol.Optional("option"): cv.string,
+        vol.Optional("percentage"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional("humidity"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
     }
 )
 
@@ -72,6 +91,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         delay = call.data.get(ATTR_DELAY)
         scheduled_time = call.data.get(ATTR_DATETIME)
         additional_data = call.data.get(ATTR_ADDITIONAL_DATA, {})
+        
+        # Collect UI-configurable action parameters and merge with additional_data
+        if additional_data is None:
+            additional_data = {}
+        
+        # Merge UI-configurable parameters into additional_data
+        for param in UI_ACTION_PARAMS:
+            if param in call.data:
+                additional_data[param] = call.data[param]
 
         task_id = str(uuid.uuid4())
         if delay:
