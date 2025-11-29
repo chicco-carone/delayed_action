@@ -12,7 +12,10 @@ from homeassistant.helpers.service import async_register_admin_service
 from .const import (
     DOMAIN, ATTR_ENTITY_ID, ATTR_DELAY, ATTR_ACTION, ATTR_DATETIME,
     ATTR_ADDITIONAL_DATA, ATTR_TASK_ID, CONF_DOMAINS, ATTR_DOMAINS,
-    UI_ACTION_PARAMS
+    UI_ACTION_PARAMS, ATTR_BRIGHTNESS, ATTR_BRIGHTNESS_PCT, ATTR_COLOR_TEMP,
+    ATTR_RGB_COLOR, ATTR_TEMPERATURE, ATTR_HVAC_MODE, ATTR_POSITION,
+    ATTR_TILT_POSITION, ATTR_VOLUME_LEVEL, ATTR_MEDIA_CONTENT_ID,
+    ATTR_MEDIA_CONTENT_TYPE, ATTR_OPTION, ATTR_PERCENTAGE, ATTR_HUMIDITY
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -30,20 +33,20 @@ SERVICE_DELAY_SCHEMA = vol.Schema(
         vol.Optional(ATTR_DATETIME): cv.datetime,
         vol.Optional(ATTR_ADDITIONAL_DATA): dict,
         # UI-configurable action parameters
-        vol.Optional("brightness"): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
-        vol.Optional("brightness_pct"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
-        vol.Optional("color_temp"): vol.All(vol.Coerce(int), vol.Range(min=153, max=500)),
-        vol.Optional("rgb_color"): vol.All(list, vol.Length(min=3, max=3)),
-        vol.Optional("temperature"): vol.Coerce(float),
-        vol.Optional("hvac_mode"): cv.string,
-        vol.Optional("position"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
-        vol.Optional("tilt_position"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
-        vol.Optional("volume_level"): vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
-        vol.Optional("media_content_id"): cv.string,
-        vol.Optional("media_content_type"): cv.string,
-        vol.Optional("option"): cv.string,
-        vol.Optional("percentage"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
-        vol.Optional("humidity"): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional(ATTR_BRIGHTNESS): vol.All(vol.Coerce(int), vol.Range(min=0, max=255)),
+        vol.Optional(ATTR_BRIGHTNESS_PCT): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional(ATTR_COLOR_TEMP): vol.All(vol.Coerce(int), vol.Range(min=153, max=500)),
+        vol.Optional(ATTR_RGB_COLOR): vol.All(list, vol.Length(min=3, max=3)),
+        vol.Optional(ATTR_TEMPERATURE): vol.Coerce(float),
+        vol.Optional(ATTR_HVAC_MODE): cv.string,
+        vol.Optional(ATTR_POSITION): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional(ATTR_TILT_POSITION): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional(ATTR_VOLUME_LEVEL): vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
+        vol.Optional(ATTR_MEDIA_CONTENT_ID): cv.string,
+        vol.Optional(ATTR_MEDIA_CONTENT_TYPE): cv.string,
+        vol.Optional(ATTR_OPTION): cv.string,
+        vol.Optional(ATTR_PERCENTAGE): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
+        vol.Optional(ATTR_HUMIDITY): vol.All(vol.Coerce(int), vol.Range(min=0, max=100)),
     }
 )
 
@@ -90,11 +93,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         action = call.data[ATTR_ACTION]
         delay = call.data.get(ATTR_DELAY)
         scheduled_time = call.data.get(ATTR_DATETIME)
-        additional_data = call.data.get(ATTR_ADDITIONAL_DATA, {})
-        
-        # Collect UI-configurable action parameters and merge with additional_data
-        if additional_data is None:
-            additional_data = {}
+        additional_data = call.data.get(ATTR_ADDITIONAL_DATA) or {}
         
         # Merge UI-configurable parameters into additional_data
         for param in UI_ACTION_PARAMS:
