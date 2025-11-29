@@ -1,21 +1,63 @@
 execute:
   name: "Execute Delayed Action"
-  description: "Schedule an action with a delay or at a specific time"
+  description: "Schedule an action with a delay or at a specific time. Only fill in the parameters relevant to your entity type."
   fields:
     entity_id:
       name: "Entity"
-      description: "The entity ID of the device to control"
+      description: "The entity to control"
       required: true
       example: "switch.any_switch"
       selector:
         entity:
     action:
       name: "Action"
-      description: "The action to perform (e.g., turn_on, turn_off, set_brightness, set_temperature)"
+      description: "The action to perform on the entity"
       required: true
       example: "turn_on"
       selector:
-        text:
+        select:
+          mode: dropdown
+          options:
+            - label: "Turn On"
+              value: "turn_on"
+            - label: "Turn Off"
+              value: "turn_off"
+            - label: "Toggle"
+              value: "toggle"
+            - label: "Set Position (covers)"
+              value: "set_cover_position"
+            - label: "Set Tilt Position (covers)"
+              value: "set_cover_tilt_position"
+            - label: "Open Cover"
+              value: "open_cover"
+            - label: "Close Cover"
+              value: "close_cover"
+            - label: "Set Temperature (climate)"
+              value: "set_temperature"
+            - label: "Set HVAC Mode (climate)"
+              value: "set_hvac_mode"
+            - label: "Set Fan Mode (climate)"
+              value: "set_fan_mode"
+            - label: "Set Humidity (humidifier)"
+              value: "set_humidity"
+            - label: "Set Speed (fan)"
+              value: "set_percentage"
+            - label: "Set Volume (media player)"
+              value: "volume_set"
+            - label: "Play Media (media player)"
+              value: "play_media"
+            - label: "Media Play"
+              value: "media_play"
+            - label: "Media Pause"
+              value: "media_pause"
+            - label: "Media Stop"
+              value: "media_stop"
+            - label: "Select Option"
+              value: "select_option"
+            - label: "Lock"
+              value: "lock"
+            - label: "Unlock"
+              value: "unlock"
     delay:
       name: "Delay (seconds)"
       description: "The delay in seconds before performing the action"
@@ -33,18 +75,20 @@ execute:
       selector:
         datetime:
     brightness:
-      name: "Brightness"
+      name: "Brightness (Light)"
       description: "Brightness level for light entities (0-255)"
       example: 128
+      collapsed: true
       selector:
         number:
           min: 0
           max: 255
           mode: slider
     brightness_pct:
-      name: "Brightness Percentage"
-      description: "Brightness percentage for light entities (0-100)"
+      name: "Brightness % (Light)"
+      description: "Brightness percentage for light entities"
       example: 50
+      collapsed: true
       selector:
         number:
           min: 0
@@ -52,24 +96,27 @@ execute:
           unit_of_measurement: "%"
           mode: slider
     color_temp:
-      name: "Color Temperature"
-      description: "Color temperature in mireds for light entities"
-      example: 300
+      name: "Color Temperature (Light)"
+      description: "Color temperature in Kelvin for light entities"
+      example: 4000
+      collapsed: true
       selector:
-        number:
-          min: 153
-          max: 500
-          mode: slider
+        color_temp:
+          unit: kelvin
+          min: 2000
+          max: 6500
     rgb_color:
-      name: "RGB Color"
+      name: "RGB Color (Light)"
       description: "RGB color for light entities"
       example: "[255, 100, 100]"
+      collapsed: true
       selector:
         color_rgb:
     temperature:
-      name: "Temperature"
+      name: "Temperature (Climate)"
       description: "Target temperature for climate entities"
       example: 21
+      collapsed: true
       selector:
         number:
           min: 5
@@ -78,23 +125,33 @@ execute:
           unit_of_measurement: "°C"
           mode: slider
     hvac_mode:
-      name: "HVAC Mode"
+      name: "HVAC Mode (Climate)"
       description: "HVAC mode for climate entities"
       example: "heat"
+      collapsed: true
       selector:
         select:
+          mode: dropdown
           options:
-            - "off"
-            - "heat"
-            - "cool"
-            - "heat_cool"
-            - "auto"
-            - "dry"
-            - "fan_only"
+            - label: "Off"
+              value: "off"
+            - label: "Heat"
+              value: "heat"
+            - label: "Cool"
+              value: "cool"
+            - label: "Heat/Cool"
+              value: "heat_cool"
+            - label: "Auto"
+              value: "auto"
+            - label: "Dry"
+              value: "dry"
+            - label: "Fan Only"
+              value: "fan_only"
     position:
-      name: "Position"
-      description: "Position for cover entities (0-100)"
+      name: "Position (Cover)"
+      description: "Position for cover entities"
       example: 50
+      collapsed: true
       selector:
         number:
           min: 0
@@ -102,9 +159,10 @@ execute:
           unit_of_measurement: "%"
           mode: slider
     tilt_position:
-      name: "Tilt Position"
-      description: "Tilt position for cover entities (0-100)"
+      name: "Tilt Position (Cover)"
+      description: "Tilt position for cover entities"
       example: 50
+      collapsed: true
       selector:
         number:
           min: 0
@@ -112,9 +170,10 @@ execute:
           unit_of_measurement: "%"
           mode: slider
     volume_level:
-      name: "Volume Level"
-      description: "Volume level for media player entities (0.0-1.0)"
+      name: "Volume (Media Player)"
+      description: "Volume level for media player entities"
       example: 0.5
+      collapsed: true
       selector:
         number:
           min: 0
@@ -122,34 +181,45 @@ execute:
           step: 0.01
           mode: slider
     media_content_id:
-      name: "Media Content ID"
+      name: "Media Content ID (Media Player)"
       description: "Media content ID for media player entities"
       example: "spotify:playlist:123"
+      collapsed: true
       selector:
         text:
     media_content_type:
-      name: "Media Content Type"
+      name: "Media Content Type (Media Player)"
       description: "Media content type for media player entities"
       example: "music"
+      collapsed: true
       selector:
         select:
+          mode: dropdown
           options:
-            - "music"
-            - "tvshow"
-            - "video"
-            - "episode"
-            - "channel"
-            - "playlist"
+            - label: "Music"
+              value: "music"
+            - label: "TV Show"
+              value: "tvshow"
+            - label: "Video"
+              value: "video"
+            - label: "Episode"
+              value: "episode"
+            - label: "Channel"
+              value: "channel"
+            - label: "Playlist"
+              value: "playlist"
     option:
-      name: "Option"
+      name: "Option (Select)"
       description: "Option to select for input_select or select entities"
       example: "Option 1"
+      collapsed: true
       selector:
         text:
     percentage:
-      name: "Fan Speed Percentage"
-      description: "Speed percentage for fan entities (0-100)"
+      name: "Speed % (Fan)"
+      description: "Speed percentage for fan entities"
       example: 50
+      collapsed: true
       selector:
         number:
           min: 0
@@ -157,9 +227,10 @@ execute:
           unit_of_measurement: "%"
           mode: slider
     humidity:
-      name: "Target Humidity"
-      description: "Target humidity for humidifier entities (0-100)"
+      name: "Target Humidity (Humidifier)"
+      description: "Target humidity for humidifier entities"
       example: 50
+      collapsed: true
       selector:
         number:
           min: 0
@@ -167,9 +238,11 @@ execute:
           unit_of_measurement: "%"
           mode: slider
     data:
-      name: "Additional Data"
-      description: "Any additional data to be passed to the service call as a dictionary (optional, for advanced use). Note: UI-configurable parameters above will override matching keys in this field."
+      name: "Additional Data (Advanced)"
+      description: "Any additional data as a dictionary. UI parameters above override matching keys."
       example: '{"attribute": "value"}'
+      collapsed: true
+      advanced: true
       selector:
         object:
 cancel:

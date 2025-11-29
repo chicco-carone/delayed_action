@@ -26,18 +26,18 @@
     "services": {
         "execute": {
             "name": "Verzögerte Aktion ausführen",
-            "description": "Eine Aktion mit Verzögerung oder zu einem bestimmten Zeitpunkt planen",
+            "description": "Eine Aktion mit Verzögerung oder zu einem bestimmten Zeitpunkt planen. Füllen Sie nur die für Ihren Entitätstyp relevanten Parameter aus.",
             "fields": {
                 "entity_id": {
                     "name": "Entität",
-                    "description": "Die Entitäts-ID des zu steuernden Geräts"
+                    "description": "Die zu steuernde Entität"
                 },
                 "action": {
                     "name": "Aktion",
-                    "description": "Die auszuführende Aktion (z.B. turn_on, turn_off)"
+                    "description": "Die auszuführende Aktion"
                 },
                 "delay": {
-                    "name": "Verzögerung",
+                    "name": "Verzögerung (Sekunden)",
                     "description": "Die Verzögerung in Sekunden vor der Ausführung der Aktion"
                 },
                 "datetime": {
@@ -45,64 +45,64 @@
                     "description": "Das genaue Datum und die Uhrzeit für die Ausführung der Aktion"
                 },
                 "brightness": {
-                    "name": "Helligkeit",
+                    "name": "Helligkeit (Licht)",
                     "description": "Helligkeitsstufe für Lichtentitäten (0-255)"
                 },
                 "brightness_pct": {
-                    "name": "Helligkeit in Prozent",
-                    "description": "Helligkeit in Prozent für Lichtentitäten (0-100)"
+                    "name": "Helligkeit % (Licht)",
+                    "description": "Helligkeit in Prozent für Lichtentitäten"
                 },
                 "color_temp": {
-                    "name": "Farbtemperatur",
-                    "description": "Farbtemperatur in Mired für Lichtentitäten"
+                    "name": "Farbtemperatur (Licht)",
+                    "description": "Farbtemperatur in Kelvin für Lichtentitäten"
                 },
                 "rgb_color": {
-                    "name": "RGB-Farbe",
+                    "name": "RGB-Farbe (Licht)",
                     "description": "RGB-Farbe für Lichtentitäten"
                 },
                 "temperature": {
-                    "name": "Temperatur",
+                    "name": "Temperatur (Klima)",
                     "description": "Zieltemperatur für Klimaentitäten"
                 },
                 "hvac_mode": {
-                    "name": "HVAC-Modus",
+                    "name": "HVAC-Modus (Klima)",
                     "description": "HVAC-Modus für Klimaentitäten"
                 },
                 "position": {
-                    "name": "Position",
-                    "description": "Position für Abdeckungsentitäten (0-100)"
+                    "name": "Position (Abdeckung)",
+                    "description": "Position für Abdeckungsentitäten"
                 },
                 "tilt_position": {
-                    "name": "Neigungsposition",
-                    "description": "Neigungsposition für Abdeckungsentitäten (0-100)"
+                    "name": "Neigungsposition (Abdeckung)",
+                    "description": "Neigungsposition für Abdeckungsentitäten"
                 },
                 "volume_level": {
-                    "name": "Lautstärke",
-                    "description": "Lautstärke für Mediaplayer-Entitäten (0.0-1.0)"
+                    "name": "Lautstärke (Mediaplayer)",
+                    "description": "Lautstärke für Mediaplayer-Entitäten"
                 },
                 "media_content_id": {
-                    "name": "Medieninhalt-ID",
+                    "name": "Medieninhalt-ID (Mediaplayer)",
                     "description": "Medieninhalt-ID für Mediaplayer-Entitäten"
                 },
                 "media_content_type": {
-                    "name": "Medieninhaltstyp",
+                    "name": "Medieninhaltstyp (Mediaplayer)",
                     "description": "Medieninhaltstyp für Mediaplayer-Entitäten"
                 },
                 "option": {
-                    "name": "Option",
+                    "name": "Option (Auswahl)",
                     "description": "Option zur Auswahl für input_select oder select Entitäten"
                 },
                 "percentage": {
-                    "name": "Lüftergeschwindigkeit",
-                    "description": "Geschwindigkeit in Prozent für Lüfterentitäten (0-100)"
+                    "name": "Geschwindigkeit % (Lüfter)",
+                    "description": "Geschwindigkeit in Prozent für Lüfterentitäten"
                 },
                 "humidity": {
-                    "name": "Luftfeuchtigkeit",
-                    "description": "Zielluftfeuchtigkeit für Luftbefeuchter-Entitäten (0-100)"
+                    "name": "Zielluftfeuchtigkeit (Luftbefeuchter)",
+                    "description": "Zielluftfeuchtigkeit für Luftbefeuchter-Entitäten"
                 },
                 "data": {
-                    "name": "Zusätzliche Daten",
-                    "description": "Alle zusätzlichen Daten, die an den Serviceaufruf übergeben werden sollen. Hinweis: UI-konfigurierbare Parameter oben überschreiben übereinstimmende Schlüssel in diesem Feld."
+                    "name": "Zusätzliche Daten (Erweitert)",
+                    "description": "Alle zusätzlichen Daten als Dictionary. UI-Parameter überschreiben übereinstimmende Schlüssel."
                 }
             }
         },
@@ -112,7 +112,7 @@
             "fields": {
                 "entity_id": {
                     "name": "Entität",
-                    "description": "Die Entitäts-ID des Geräts, für das Aktionen abgebrochen werden sollen"
+                    "description": "Die Entität, für die Aktionen abgebrochen werden sollen"
                 },
                 "task_id": {
                     "name": "Aufgaben-ID",
